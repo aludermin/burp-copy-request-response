@@ -28,10 +28,22 @@ public class CopyRequestResponseContextMenuItemsProvider implements ContextMenuI
         copyFullHeader.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeader(requestResponses));
         menuItems.add(copyFullHeader);
 
+        var copyFullFullMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Full, Markdown Code Blocks)");
+        copyFullFullMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullFullMarkdown(requestResponses));
+        menuItems.add(copyFullFullMarkdown);
+
+        var copyFullHeaderMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Header, Markdown Code Blocks)");
+        copyFullHeaderMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderMarkdown(requestResponses));
+        menuItems.add(copyFullHeaderMarkdown);
+
         if (event.messageEditorRequestResponse().map(MessageEditorHttpRequestResponse::selectionContext).orElse(null) == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE) {
             var copyFullHeaderPlusSelectedData = new JMenuItem("Copy HTTP Request & Response (Full/Header + Selected Data)");
             copyFullHeaderPlusSelectedData.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedData(event.messageEditorRequestResponse().orElseThrow()));
             menuItems.add(copyFullHeaderPlusSelectedData);
+
+            var copyFullHeaderPlusSelectedDataMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Header + Selected Data, Markdown Code Blocks)");
+            copyFullHeaderPlusSelectedDataMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedDataMarkdown(event.messageEditorRequestResponse().orElseThrow()));
+            menuItems.add(copyFullHeaderPlusSelectedDataMarkdown);
         }
 
 
