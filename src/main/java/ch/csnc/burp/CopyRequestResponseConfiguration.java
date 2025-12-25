@@ -20,6 +20,9 @@ public class CopyRequestResponseConfiguration {
     private static final String useNbspCheckbox = "Use Non-Breakable Spaces";
     private static final boolean useNbspCheckboxDefault = false;
 
+    private static final String markdownCodeBlockHeaderLabel = "Markdown Code Block Header";
+    private static final String markdownCodeBlockHeaderDefault = "http highlight-manual";
+
     public static String cutText() {
         var cutText = panel.getString(cutTextLabel);
 
@@ -44,6 +47,10 @@ public class CopyRequestResponseConfiguration {
         return panel.getString(copyFullHeaderLabel);
     }
 
+    public static String markdownCodeBlockHeader() {
+        return panel.getString(markdownCodeBlockHeaderLabel);
+    }
+
 
     private CopyRequestResponseConfiguration() {
         // static class
@@ -54,7 +61,8 @@ public class CopyRequestResponseConfiguration {
             SettingsPanelSetting.stringSetting(cutTextLabel, cutTextDefault),
             SettingsPanelSetting.booleanSetting(useNbspCheckbox, useNbspCheckboxDefault),
             SettingsPanelSetting.stringSetting(copyFullFullOrSelectionHotKeyLabel, copyFullFullOrSelectionHotKeyDefault),
-            SettingsPanelSetting.stringSetting(copyFullHeaderLabel, copyFullHeaderDefault)
+            SettingsPanelSetting.stringSetting(copyFullHeaderLabel, copyFullHeaderDefault),
+            SettingsPanelSetting.stringSetting(markdownCodeBlockHeaderLabel, markdownCodeBlockHeaderDefault)
     };
 
     // Create settings panel
