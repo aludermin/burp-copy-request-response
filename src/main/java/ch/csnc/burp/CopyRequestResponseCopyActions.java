@@ -50,11 +50,63 @@ public class CopyRequestResponseCopyActions {
     toClipboard(text);
   }
 
+  public static void copyFullFullMarkdown(List<HttpRequestResponse> requestResponses) {
+    requestResponses = requestResponses.stream().map(CopyRequestResponseCopyActions::hideHeaders).toList();
+
+    var text = requestResponses.stream()
+        .map(requestResponse -> {
+          var requestBlock = toMarkdownCodeBlock(requestResponse.request().toString().strip());
+          var responseBlock = Optional.ofNullable(requestResponse.response())
+              .map(HttpResponse::toString)
+              .map(String::strip)
+              .map(CopyRequestResponseCopyActions::toMarkdownCodeBlock)
+              .orElse("");
+          return format(requestBlock, responseBlock);
+        })
+        .collect(Collectors.joining("\n\n"));
+
+    toClipboard(text);
+  }
+
+  public static void copyFullHeaderMarkdown(List<HttpRequestResponse> requestResponses) {
+    requestResponses = requestResponses.stream().map(CopyRequestResponseCopyActions::hideHeaders).toList();
+
+    var text = requestResponses.stream()
+        .map(requestResponse -> {
+          var requestBlock = toMarkdownCodeBlock(requestResponse.request().toString().strip());
+          var responseString = "";
+          if (requestResponse.hasResponse()) {
+            var response = requestResponse.response();
+            responseString = response.toString().substring(0, response.bodyOffset()).strip();
+            responseString += "\n\n";
+            responseString += CopyRequestResponseConfiguration.cutText();
+          }
+          var responseBlock = responseString.isEmpty() ? "" : toMarkdownCodeBlock(responseString);
+          return format(requestBlock, responseBlock);
+        })
+        .collect(Collectors.joining("\n\n"));
+
+    toClipboard(text);
+  }
+
   public static void copyFullHeaderPlusSelectedData(MessageEditorHttpRequestResponse editor) {
     var requestResponse = hideHeaders(editor.requestResponse());
-
     var requestString = requestResponse.request().toString().strip();
+    var text = format(requestString, selectedResponseString(editor, requestResponse));
+    copyWithDelay(text);
+  }
 
+  public static void copyFullHeaderPlusSelectedDataMarkdown(MessageEditorHttpRequestResponse editor) {
+    var requestResponse = hideHeaders(editor.requestResponse());
+    var requestBlock = toMarkdownCodeBlock(requestResponse.request().toString().strip());
+    var responseString = selectedResponseString(editor, requestResponse);
+    var responseBlock = responseString.isEmpty() ? "" : toMarkdownCodeBlock(responseString);
+    var text = format(requestBlock, responseBlock);
+    copyWithDelay(text);
+  }
+
+  private static String selectedResponseString(MessageEditorHttpRequestResponse editor,
+      HttpRequestResponse requestResponse) {
     Supplier<String> responseStringSupplier = () -> {
       if (!requestResponse.hasResponse()) {
         return "";
@@ -78,7 +130,6 @@ public class CopyRequestResponseCopyActions {
       }
 
       var endIndex = selectionOffsets.endIndexExclusive();
-      CopyRequestResponseExtension.api().logging().logToError("start: %d, end %d".formatted(startIndex, endIndex));
       if (endIndex <= startIndex) {
         responseString += CopyRequestResponseConfiguration.cutText();
         return responseString;
@@ -109,8 +160,10 @@ public class CopyRequestResponseCopyActions {
       return responseString;
     };
 
-    var text = format(requestString, responseStringSupplier.get());
+    return responseStringSupplier.get();
+  }
 
+  private static void copyWithDelay(String text) {
     // Ugly hack because VMware is messing up the clipboard if a text is still
     // selected, the function
     // has to be run in a separate thread which sleeps for 0.2 seconds.
@@ -157,6 +210,11 @@ public class CopyRequestResponseCopyActions {
         .replace("\\n", "\n")
         .replace("{request}", request)
         .replace("{response}", response);
+  }
+
+  private static String toMarkdownCodeBlock(String content) {
+    var header = CopyRequestResponseConfiguration.markdownCodeBlockHeader().strip();
+    return "```%s\n%s\n```".formatted(header, content);
   }
 
   private static void toClipboard(String text0) {
