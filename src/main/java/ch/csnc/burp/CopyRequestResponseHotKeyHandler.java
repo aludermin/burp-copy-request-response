@@ -16,9 +16,9 @@ public class CopyRequestResponseHotKeyHandler {
                         event -> {
                             event.messageEditorRequestResponse().ifPresent(messageEditorHttpRequestResponse -> {
                                 if (messageEditorHttpRequestResponse.selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE && messageEditorHttpRequestResponse.selectionOffsets().isPresent()) {
-                                    CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedData(messageEditorHttpRequestResponse);
+                                    CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedDataConfigured(messageEditorHttpRequestResponse);
                                 } else {
-                                    CopyRequestResponseCopyActions.copyFullFull(List.of(messageEditorHttpRequestResponse.requestResponse()));
+                                    CopyRequestResponseCopyActions.copyFullFullConfigured(List.of(messageEditorHttpRequestResponse.requestResponse()));
                                 }
                             });
                         });
@@ -32,7 +32,7 @@ public class CopyRequestResponseHotKeyHandler {
                         event -> event.messageEditorRequestResponse()
                                 .map(MessageEditorHttpRequestResponse::requestResponse)
                                 .map(List::of)
-                                .ifPresent(CopyRequestResponseCopyActions::copyFullHeader));
+                                .ifPresent(CopyRequestResponseCopyActions::copyFullHeaderConfigured));
     }
 
     private CopyRequestResponseHotKeyHandler() {

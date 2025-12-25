@@ -21,29 +21,17 @@ public class CopyRequestResponseContextMenuItemsProvider implements ContextMenuI
         var menuItems = new ArrayList<Component>();
 
         var copyFullFull = new JMenuItem("Copy HTTP Request & Response (Full/Full)");
-        copyFullFull.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullFull(requestResponses));
+        copyFullFull.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullFullConfigured(requestResponses));
         menuItems.add(copyFullFull);
 
         var copyFullHeader = new JMenuItem("Copy HTTP Request & Response (Full/Header)");
-        copyFullHeader.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeader(requestResponses));
+        copyFullHeader.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderConfigured(requestResponses));
         menuItems.add(copyFullHeader);
-
-        var copyFullFullMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Full, Markdown Code Blocks)");
-        copyFullFullMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullFullMarkdown(requestResponses));
-        menuItems.add(copyFullFullMarkdown);
-
-        var copyFullHeaderMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Header, Markdown Code Blocks)");
-        copyFullHeaderMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderMarkdown(requestResponses));
-        menuItems.add(copyFullHeaderMarkdown);
 
         if (event.messageEditorRequestResponse().map(MessageEditorHttpRequestResponse::selectionContext).orElse(null) == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE) {
             var copyFullHeaderPlusSelectedData = new JMenuItem("Copy HTTP Request & Response (Full/Header + Selected Data)");
-            copyFullHeaderPlusSelectedData.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedData(event.messageEditorRequestResponse().orElseThrow()));
+            copyFullHeaderPlusSelectedData.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedDataConfigured(event.messageEditorRequestResponse().orElseThrow()));
             menuItems.add(copyFullHeaderPlusSelectedData);
-
-            var copyFullHeaderPlusSelectedDataMarkdown = new JMenuItem("Copy HTTP Request & Response (Full/Header + Selected Data, Markdown Code Blocks)");
-            copyFullHeaderPlusSelectedDataMarkdown.addActionListener(actionEvent -> CopyRequestResponseCopyActions.copyFullHeaderPlusSelectedDataMarkdown(event.messageEditorRequestResponse().orElseThrow()));
-            menuItems.add(copyFullHeaderPlusSelectedDataMarkdown);
         }
 
 
