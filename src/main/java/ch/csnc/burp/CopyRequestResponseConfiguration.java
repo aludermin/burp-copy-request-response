@@ -24,6 +24,8 @@ public class CopyRequestResponseConfiguration {
   private static final String HIDE_REQUEST_HEADERS_DEFAULT = "";
   private static final String HIDE_RESPONSE_HEADERS_LABEL = "Hide Response Headers";
   private static final String HIDE_RESPONSE_HEADERS_DEFAULT = "";
+  private static final String MARKDOWN_CODE_BLOCK_HEADER_LABEL = "Markdown Code Block Header";
+  private static final String MARKDOWN_CODE_BLOCK_HEADER_DEFAULT = "http highlight-manual";
 
   private final static SettingsPanelSetting[] settings = new SettingsPanelSetting[] {
       SettingsPanelSetting.stringSetting(CUT_TEXT_LABEL, CUT_TEXT_DEFAULT),
@@ -36,6 +38,7 @@ public class CopyRequestResponseConfiguration {
           "Comma-separated, case-insensitive regexes to match header names, e.g., \"sec-.*,accept.*\"",
           HIDE_REQUEST_HEADERS_LABEL, HIDE_REQUEST_HEADERS_DEFAULT),
       SettingsPanelSetting.stringSetting(HIDE_RESPONSE_HEADERS_LABEL, HIDE_RESPONSE_HEADERS_DEFAULT),
+      SettingsPanelSetting.stringSetting(MARKDOWN_CODE_BLOCK_HEADER_LABEL, MARKDOWN_CODE_BLOCK_HEADER_DEFAULT),
   };
 
   private final static SettingsPanelWithData panel = SettingsPanelBuilder.settingsPanel()
@@ -82,6 +85,10 @@ public class CopyRequestResponseConfiguration {
         .stream()
         .map(regex -> Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
         .toList();
+  }
+
+  public static String markdownCodeBlockHeader() {
+    return panel.getString(MARKDOWN_CODE_BLOCK_HEADER_LABEL);
   }
 
   public static void register() {
