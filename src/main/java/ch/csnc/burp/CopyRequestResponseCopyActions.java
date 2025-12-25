@@ -16,6 +16,30 @@ import java.util.stream.Collectors;
 
 public class CopyRequestResponseCopyActions {
 
+    public static void copyFullFullConfigured(List<HttpRequestResponse> requestResponses) {
+        if (CopyRequestResponseConfiguration.useMarkdownFormat()) {
+            copyFullFullMarkdown(requestResponses);
+        } else {
+            copyFullFull(requestResponses);
+        }
+    }
+
+    public static void copyFullHeaderConfigured(List<HttpRequestResponse> requestResponses) {
+        if (CopyRequestResponseConfiguration.useMarkdownFormat()) {
+            copyFullHeaderMarkdown(requestResponses);
+        } else {
+            copyFullHeader(requestResponses);
+        }
+    }
+
+    public static void copyFullHeaderPlusSelectedDataConfigured(MessageEditorHttpRequestResponse editor) {
+        if (CopyRequestResponseConfiguration.useMarkdownFormat()) {
+            copyFullHeaderPlusSelectedDataMarkdown(editor);
+        } else {
+            copyFullHeaderPlusSelectedData(editor);
+        }
+    }
+
     public static void copyFullFull(List<HttpRequestResponse> requestResponses) {
         var text =
                 requestResponses
